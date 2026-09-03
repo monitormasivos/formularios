@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Formulario Personalizado</title>
+  <style>
+    /* Estilos básicos */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .form-container {
+      max-width: 480px;
+      margin: 20px auto;
+      background: #ffffff;
+      padding: 24px 28px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus {
+      border-color: #4CAF50;
+    }
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #mensajeExito {
+      display: none;
+      color: #2e7d32;
+      background-color: #edf7ed;
+      border: 1px solid #c8e6c9;
+      border-radius: 4px;
+      padding: 12px;
+      font-weight: 500;
+      margin-top: 18px;
+      text-align: center;
+    }
+    #mensajeError {
+      display: none;
+      color: #c62828;
+      background-color: #ffebee;
+      border: 1px solid #ffcdd2;
+      border-radius: 4px;
+      padding: 12px;
+      font-weight: 500;
+      margin-top: 18px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <!-- Formulario identificado para JavaScript -->
+    <form id="miFormularioGoogle">
+      
+      <label for="p1">Pregunta 1:</label>
+      <input id="p1" type="text" name="entry.1091301635" required>
+
+      <label for="p2">Pregunta 2:</label>
+      <input id="p2" type="text" name="entry.1660275454" required>
+
+      <label for="p3">Pregunta 3:</label>
+      <input id="p3" type="text" name="entry.1398348628" required>
+
+      <label for="p4">Pregunta 4:</label>
+      <input id="p4" type="text" name="entry.1915320890" required>
+
+      <label for="p5">Pregunta 5:</label>
+      <input id="p5" type="text" name="entry.951965866" required>
+
+      <label for="p6">Pregunta 6:</label>
+      <input id="p6" type="text" name="entry.1122720499" required>
+
+      <button type="submit">Enviar Respuestas</button>
+      
+      <!-- Mensajes de estado -->
+      <p id="mensajeExito">¡Muchas gracias! Tus respuestas han sido registradas.</p>
+      <p id="mensajeError">Hubo un problema al enviar el formulario. Inténtalo de nuevo.</p>
+    </form>
+  </div>
+
+  <script>
+    const formulario = document.getElementById('miFormularioGoogle');
+    const mensajeExito = document.getElementById('mensajeExito');
+    const mensajeError = document.getElementById('mensajeError');
+
+    formulario.addEventListener('submit', function(e) {
+      e.preventDefault(); // Evita la recarga de página
+
+      // Ocultar mensajes previos
+      mensajeExito.style.display = 'none';
+      mensajeError.style.display = 'none';
+
+      // Cambiar esta URL por la de tu Google Form terminada en /formResponse
+      const url = 'https://docs.google.com/forms/u/0/d/1drKQ17nO_L5sDtnkR75N9W2uyTpG06d8_it4hTLLGAM/formResponse';
+      
+      // Empaqueta automáticamente todos los campos del formulario
+      const datos = new FormData(formulario);
+
+      // Envío asíncrono
+      fetch(url, {
+        method: 'POST',
+        body: datos,
+        mode: 'no-cors' // Crucial para peticiones a Google Forms sin CORS
+      })
+      .then(() => {
+        // Notificación de éxito y reinicio de campos
+        mensajeExito.style.display = 'block';
+        formulario.reset();
+      })
+      .catch(error => {
+        console.error('Error al enviar:', error);
+        mensajeError.style.display = 'block';
+      });
+    });
+  </script>
+
+</body>
+</html>

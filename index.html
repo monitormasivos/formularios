@@ -8,7 +8,7 @@
     body {
       font-family: sans-serif;
       margin: 2rem;
-      max-width: 450px;
+      max-width: 480px;
     }
     .campo {
       margin-bottom: 1rem;
@@ -17,31 +17,38 @@
     }
     label {
       font-weight: bold;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.95rem;
     }
     input {
-      padding: 0.5rem;
+      padding: 0.6rem;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+    input:focus {
+      outline: none;
+      border-color: #0066cc;
+    }
     button {
-      padding: 0.7rem;
+      padding: 0.75rem;
       font-size: 1rem;
       cursor: pointer;
-      background-color: #0056b3;
+      background-color: #0066cc;
       color: #fff;
       border: none;
       border-radius: 4px;
+      font-weight: bold;
       width: 100%;
     }
     button:disabled {
-      opacity: 0.6;
+      background-color: #aaa;
       cursor: not-allowed;
     }
     #mensaje {
       margin-top: 1rem;
       font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
@@ -49,7 +56,12 @@
 
   <h2>Registro de Datos</h2>
 
-  <form id="miFormulario">
+  <!-- El atributo target apunta directamente al iframe oculto -->
+  <form id="miFormulario"
+        action="https://docs.google.com/forms/d/e/1FAIpQLSfwqghKzCNBuzDNv_xFhtOvElcfnfsQrtQg2SBNMJUTDIM-vQ/formResponse"
+        method="POST"
+        target="hidden_iframe">
+
     <div class="campo">
       <label for="nombre">Nombre y apellido del titular:</label>
       <input type="text" id="nombre" name="entry.1660275454" required>
@@ -83,41 +95,35 @@
     <button type="submit" id="btnEnviar">Enviar datos</button>
   </form>
 
+  <!-- Marco invisible donde se procesa la respuesta de Google sin recargar tu página -->
+  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
   <p id="mensaje"></p>
 
   <script>
     const form = document.getElementById('miFormulario');
     const mensaje = document.getElementById('mensaje');
     const btnEnviar = document.getElementById('btnEnviar');
+    const iframe = document.getElementById('hidden_iframe');
 
-    // Endpoint de Google Forms que procesa las respuestas
-    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfwqghKzCNBuzDNv_xFhtOvElcfnfsQrtQg2SBNMJUTDIM-vQ/formResponse';
+    let enviado = false;
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Al presionar enviar, bloqueamos el botón y notificamos
+    form.addEventListener('submit', () => {
       btnEnviar.disabled = true;
-      mensaje.style.color = '#333';
+      mensaje.style.color = '#555';
       mensaje.textContent = 'Enviando información...';
+      enviado = true;
+    });
 
-      const datos = new URLSearchParams(new FormData(form));
-
-      try {
-        await fetch(FORM_URL, {
-          method: 'POST',
-          mode: 'no-cors', // Evita el bloqueo por políticas de origen cruzado
-          body: datos
-        });
-
-        // Al usar no-cors, la respuesta es opaca, pero los datos llegan a Google Sheets
+    // Cuando el iframe termina de recibir la respuesta de Google
+    iframe.addEventListener('load', () => {
+      if (enviado) {
         mensaje.style.color = 'green';
-        mensaje.textContent = '¡Datos enviados correctamente!';
-        form.reset();
-      } catch (error) {
-        mensaje.style.color = 'red';
-        mensaje.textContent = 'Ocurrió un error al enviar. Intenta nuevamente.';
-        console.error(error);
-      } finally {
+        mensaje.textContent = '¡Datos registrados correctamente en la hoja!';
         btnEnviar.disabled = false;
+        form.reset();
+        enviado = false;
       }
     });
   </script>

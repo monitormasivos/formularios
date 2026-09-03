@@ -8,7 +8,7 @@
     body {
       font-family: sans-serif;
       margin: 2rem;
-      max-width: 480px;
+      max-width: 450px;
     }
     .campo {
       margin-bottom: 1rem;
@@ -56,46 +56,29 @@
 
   <h2>Registro de Datos</h2>
 
-  <!-- El atributo target apunta directamente al iframe oculto -->
   <form id="miFormulario"
-        action="https://docs.google.com/forms/d/e/1FAIpQLSfwqghKzCNBuzDNv_xFhtOvElcfnfsQrtQg2SBNMJUTDIM-vQ/formResponse"
+        action="https://docs.google.com/forms/d/e/1FAIpQLSdx5nLKsOm4EHEipdA_Nj6VlV09Wldb2wUkXRWQAxJkkOt1Ow/formResponse"
         method="POST"
         target="hidden_iframe">
 
     <div class="campo">
-      <label for="nombre">Nombre y apellido del titular:</label>
-      <input type="text" id="nombre" name="entry.1660275454" required>
+      <label for="nombre">Nombre y apellido:</label>
+      <input type="text" id="nombre" name="entry.2005620554" required>
     </div>
 
     <div class="campo">
       <label for="correo">Correo electrónico:</label>
-      <input type="email" id="correo" name="entry.1122720499" required>
+      <input type="email" id="correo" name="entry.1045781291" required>
     </div>
 
     <div class="campo">
-      <label for="servicio">Número del servicio:</label>
-      <input type="text" id="servicio" name="entry.1091301635" required>
-    </div>
-
-    <div class="campo">
-      <label for="cedula">Cédula de Identidad del titular:</label>
-      <input type="text" id="cedula" name="entry.1398348628" required>
-    </div>
-
-    <div class="campo">
-      <label for="celular1">Número celular de contacto (1):</label>
-      <input type="tel" id="celular1" name="entry.1915320890" required>
-    </div>
-
-    <div class="campo">
-      <label for="celular2">Número celular de contacto (2):</label>
-      <input type="tel" id="celular2" name="entry.951965866">
+      <label for="telefono">Número telefónico:</label>
+      <input type="tel" id="telefono" name="entry.1166974658" required>
     </div>
 
     <button type="submit" id="btnEnviar">Enviar datos</button>
   </form>
 
-  <!-- Marco invisible donde se procesa la respuesta de Google sin recargar tu página -->
   <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
   <p id="mensaje"></p>
@@ -108,7 +91,6 @@
 
     let enviado = false;
 
-    // Al presionar enviar, bloqueamos el botón y notificamos
     form.addEventListener('submit', () => {
       btnEnviar.disabled = true;
       mensaje.style.color = '#555';
@@ -116,7 +98,6 @@
       enviado = true;
     });
 
-    // Cuando el iframe termina de recibir la respuesta de Google
     iframe.addEventListener('load', () => {
       if (enviado) {
         mensaje.style.color = 'green';
